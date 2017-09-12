@@ -1,0 +1,844 @@
+
+// 1、定义常量 一般都将其统一定义在文件的头部，方便管理维护
+@nice-blue: #5B83AD;
+@light-blue: @nice-blue + #111;
+
+#header {
+  color: @light-blue;
+}
+
+// 2、Mixins写法
+.bordered {
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+#menu a {
+  color: #111;
+  .bordered;
+}
+
+.post a {
+  color: red;
+  .bordered;
+}
+
+// 3、嵌套
+.clearfix {
+  display: block;
+  zoom: 1;
+
+  &:after {
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+
+//4、函数
+@base: #f04615;
+@width: 0.5;
+
+.class {
+  width: percentage(@width); // 0.5 转换为 50%
+  color: saturate(@base, 5%);//将颜色饱和度增加 5%
+  background-color: spin(lighten(@base, 25%), 8);  //颜色亮度降低 25% 并且色相值增加 8 
+}  
+
+
+//5、命名空间
+#bundle {
+  .button {
+    display: block;
+    border: 1px solid black;
+    background-color: grey;
+    &:hover {
+      background-color: white
+    }
+  }
+}
+//我们想使用以上.button的样式，可以用以下这种写法
+#header a {
+  color: orange;
+  #bundle > .button;
+}
+
+
+
+//6、Scope
+@var: red;
+
+#page {
+  @var: white;
+  #header {
+    color: @var; // white
+  }
+}
+
+//以下情况也相同
+// @var: red;
+
+// #page {
+//   #header {
+//     color: @var; // white
+//   }
+//   @var: white;
+// }
+
+//7、Variable Interpolation  值插入
+//The examples above focused on using variables to control values in CSS rules, but they can also be used in other places as well, such as selector names, property names, URLs and @import statements.
+//7-1、Selectors  选择器
+// Variables
+@mySelector: banner;
+
+// Usage
+.@{mySelector} {
+  font-weight: bold;
+  line-height: 40px;
+  margin: 0 auto;
+}
+
+//7-2、URLs
+// Variables
+@images: "../img";
+
+// 用法
+body {
+  color: #444;
+  background: url("@{images}/white-sand.png");
+}
+
+
+//7-3、Import statements  import声明
+// Variables
+// @themes: "../../src/themes";
+
+// // Usage
+// @import "@{themes}/tidal-wave.less";
+
+
+//7-4、属性
+// @property: color;
+
+// .widget {
+//   @{property}: #0ee;
+//   background-@{property}: #999;
+// }
+
+
+//8、extend继承
+nav ul {
+  &:extend(.inline);
+  background: blue;
+}
+.inline {
+  color: red;
+}
+
+// Extend 语法
+// .a:extend(.b) {}
+// the above block does the same thing as the below block
+// .a {
+//   &:extend(.b);
+// }
+
+
+// .c:extend(.d all) {
+// extends all instances of ".d" e.g. ".x.d" or ".d.x"
+// }
+// .c:extend(.d) {
+// extends only instances where the selector will be output as just ".d"
+// }
+
+
+// .e:extend(.f) {}
+// .e:extend(.g) {}
+// the above an the below do the same thing
+// .e:extend(.f, .g) {}
+
+
+// pre:hover,
+// .some-class {
+//   &:extend(div pre);
+// }
+// the above an the below do the same thing
+// pre:hover:extend(div pre),
+// .some-class:extend(div pre) {}
+
+
+
+// .bucket {
+//   tr { // nested ruleset with target selector
+//     color: blue;
+//   }
+// }
+// .some-class:extend(.bucket tr) {} // nested ruleset is recognized
+// --Outputs--
+// .bucket tr,
+// .some-class {
+//   color: blue;
+// }
+
+
+// .bucket {
+//   tr & { // nested ruleset with target selector
+//     color: blue;
+//   }
+// }
+// .some-class:extend(tr .bucket) {} // nested ruleset is recognized
+// --Outputs--
+// tr .bucket,
+// .some-class {
+//   color: blue;
+// }
+
+
+
+// [title=identifier] {
+//   color: blue;
+// }
+// [title='identifier'] {
+//   color: blue;
+// }
+// [title="identifier"] {
+//   color: blue;
+// }
+
+// .noQuote:extend([title=identifier]) {}
+// .singleQuote:extend([title='identifier']) {}
+// .doubleQuote:extend([title="identifier"]) {}
+// --Outputs--
+// [title=identifier],
+// .noQuote,
+// .singleQuote,
+// .doubleQuote {
+//   color: blue;
+// }
+
+// [title='identifier'],
+// .noQuote,
+// .singleQuote,
+// .doubleQuote {
+//   color: blue;
+// }
+
+// [title="identifier"],
+// .noQuote,
+// .singleQuote,
+// .doubleQuote {
+//   color: blue;
+// }
+
+
+// Extend "all"
+// .a.b.test,
+// .test.c {
+//   color: orange;
+// }
+// .test {
+//   &:hover {
+//     color: green;
+//   }
+// }
+
+// .replacement:extend(.test all) {}
+//--Outputs--
+// .a.b.test,
+// .test.c,
+// .a.b.replacement,
+// .replacement.c {
+//   color: orange;
+// }
+// .test:hover,
+// .replacement:hover {
+//   color: green;
+// }
+
+
+//Scoping / Extend Inside @media
+// @media print {
+//   .screenClass:extend(.selector) {} // extend inside media
+//   .selector { // this will be matched - it is in the same media
+//     color: black;
+//   }
+// }
+// .selector { // ruleset on top of style sheet - extend ignores it
+//   color: red;
+// }
+// @media screen {
+//   .selector {  // ruleset inside another media - extend ignores it
+//     color: blue;
+//   }
+// }
+//--Output--
+// @media print {
+//   .selector,
+//   .screenClass { /*  ruleset inside the same media was extended */
+//     color: black;
+//   }
+// }
+// .selector { /* ruleset on top of style sheet was ignored */
+//   color: red;
+// }
+// @media screen {
+//   .selector { /* ruleset inside another media was ignored */
+//     color: blue;
+//   }
+// }
+
+
+//继承在一个media声明内部不能匹配内部的选择器
+// @media screen {
+//   .screenClass:extend(.selector) {} // extend inside media
+//   @media (min-width: 1023px) {
+//     .selector {  // ruleset inside nested media - extend ignores it
+//       color: blue;
+//     }
+//   }
+// }
+//--Output--
+// @media screen and (min-width: 1023px) {
+//   .selector { /* ruleset inside another nested media was ignored */
+//     color: blue;
+//   }
+// }
+
+//此情况可以
+// @media screen {
+//   .selector {  /* ruleset inside nested media - top level extend works */
+//     color: blue;
+//   }
+//   @media (min-width: 1023px) {
+//     .selector {  /* ruleset inside nested media - top level extend works */
+//       color: blue;
+//     }
+//   }
+// }
+
+// .topLevel:extend(.selector) {} /* top level extend matches everything */
+//--Output--
+// @media screen {
+//   .selector,
+//   .topLevel { /* ruleset inside media was extended */
+//     color: blue;
+//   }
+// }
+// @media screen and (min-width: 1023px) {
+//   .selector,
+//   .topLevel { /* ruleset inside nested media was extended */
+//     color: blue;
+//   }
+// }
+
+
+
+//必须写在选择器后面
+//pre:hover:extend(div pre)  或者 pre:hover :extend(div pre)
+//pre:hover:extend(div pre):extend(.bucket tr)  ==等于==   pre:hover:extend(div pre, .bucket tr)
+//不允许这样  pre:hover:extend(div pre).nth-child(odd)
+//继承不允许匹配带值的选择器，如下1-1和1-2都是不允许的：
+//1-1
+// @variable: .bucket;
+// @{variable} { // interpolated selector
+//   color: blue;
+// }
+// .some-class:extend(.bucket) {} // does nothing, no match is found
+//1-2
+// .bucket {
+//   color: blue;
+// }
+// .some-class:extend(@{variable}) {} // interpolated selector matches nothing
+// @variable: .bucket;
+//以上两个例子输出：
+// .bucket {
+//   color: blue;
+// }
+//1-3这种情况是允许的
+// .bucket {
+//   color: blue;
+// }
+// @{variable}:extend(.bucket) {}
+// @variable: .selector;
+
+//9、混合Mixin  
+//其中括号是可选择的
+.a, #b {
+  color: red;
+}
+.mixin-class {
+  .a();
+}
+.mixin-id {
+  #b();
+}
+
+//如果你不想混合被输出，可使用括号，如以下.my-other-mixin不会被输出
+.my-mixin1 {
+  color: black;
+}
+.my-other-mixin() {
+  background: white;
+}
+.class {
+  .my-mixin1;
+  .my-other-mixin;
+}
+
+//以下会输出button：hover{...}
+.my-hover-mixin() {
+  &:hover {
+    border: 1px solid red;
+  }
+}
+button {
+  .my-hover-mixin();
+}
+
+//Namespaces  
+//如果你想混合值在一个更复杂的选择器中，你能累积多个id和class
+#outer {
+  .inner {
+    color: red;
+  }
+}
+
+.c {
+  #outer > .inner;
+}
+
+#my-library {
+  .my-mixin2() {
+    color: black;
+  }
+}
+// which can be used like this
+.class {
+  #my-library > .my-mixin2();
+}
+
+
+//10、带参数的Mixin
+
+//10-1
+.border-radius(@radius: 5px) {
+  -webkit-border-radius: @radius;
+     -moz-border-radius: @radius;
+          border-radius: @radius;
+}
+#header {
+  .border-radius;
+}
+//10-2
+.mixin(@color) {
+  color-1: @color;
+}
+.mixin(@color; @padding:2) {
+  color-2: @color;
+  padding-2: @padding;
+}
+.mixin(@color; @padding; @margin: 2) {
+  color-3: @color;
+  padding-3: @padding;
+  margin: @margin @margin @margin @margin;
+}
+.some .selector div {
+  .mixin(#008000);
+}
+
+//输出
+// .some .selector div {
+//   color-1: #008000;
+//   color-2: #008000;
+//   padding-2: 2;
+// }
+
+
+//10-3
+// .mixin(@color: black; @margin: 10px; @padding: 20px) {
+//   color: @color;
+//   margin: @margin;
+//   padding: @padding;
+// }
+// .class1 {
+//   .mixin(@margin: 20px; @color: #33acfe);
+// }
+// .class2 {
+//   .mixin(#efca44; @padding: 40px);
+// }
+
+
+//11、作为函数使用的Mixin
+
+//11-1
+.mixin111() {
+  @width:  100%;
+  @height: 200px;
+}
+
+.caller {
+  .mixin111();
+  width:  @width;
+  height: @height;
+}
+//11-2
+.average(@x, @y) {
+  @average: ((@x + @y) / 2);
+}
+
+div112 {
+  .average(16px, 50px); // "call" the mixin
+  padding: @average;    // use its "return" value
+}
+
+//输出
+// div {
+//   padding: 33px;
+// }
+
+//12、important关键字会被继承
+.foo (@bg: #f5f5f5, @color: #900) {
+  background: @bg;
+  color: @color;
+}
+.unimportant {
+  .foo(1);
+}
+.important {
+  .foo(2) !important;
+}
+
+//输出以下
+// .unimportant {
+//   background: #f5f5f5;
+//   color: #900;
+// }
+// .important {
+//   background: #f5f5f5 !important;
+//   color: #900 !important;
+// }
+
+
+//13、@arguments使用，以及@rest
+.box-shadow(@x: 0; @y: 0; @blur: 1px; @color: #000) {
+  -webkit-box-shadow: @arguments;
+     -moz-box-shadow: @arguments;
+          box-shadow: @arguments;
+}
+.big-block {
+  .box-shadow(2px; 5px);
+}
+
+//输出
+// .big-block {
+//   -webkit-box-shadow: 2px 5px 1px #000;
+//      -moz-box-shadow: 2px 5px 1px #000;
+//           box-shadow: 2px 5px 1px #000;
+// }
+
+//Advanced arguments and the @rest variable
+// .mixin(...) {        // matches 0-N arguments
+// .mixin() {           // matches exactly 0 arguments
+// .mixin(@a: 1) {      // matches 0-1 arguments
+// .mixin(@a: 1; ...) { // matches 0-N arguments
+// .mixin(@a; ...) {    // matches 1-N arguments
+
+// .mixin(@a; @rest...) {
+//    // @rest is bound to arguments after @a
+//    // @arguments is bound to all arguments
+// }
+
+//14、多值匹配
+.mixin14(dark; @color) {
+  color: darken(@color, 10%);
+}
+.mixin14(light; @color) {
+  color: lighten(@color, 10%);
+}
+.mixin14(@_; @color) {
+  display: block;
+}
+
+@switch: light;
+
+.class14 {
+  .mixin14(@switch; #888);
+}
+
+//输出
+// .class {
+//   color: #a2a2a2;
+//   display: block;
+// }
+
+// 15、Minxin 拓展
+//15-1
+
+.mixin15 (@a) when (lightness(@a) >= 50%) {
+  background-color: black;
+}
+.mixin15 (@a) when (lightness(@a) < 50%) {
+  background-color: white;
+}
+.mixin15 (@a) {
+  color: @a;
+}
+.class115 { .mixin15(#ddd) }
+.class215 { .mixin15(#555) }
+
+//15-2
+// @media: mobile;
+
+// .mixin (@a) when (@media = mobile) { ... }
+// .mixin (@a) when (@media = desktop) { ... }
+
+// .max (@a; @b) when (@a > @b) { width: @a }
+// .max (@a; @b) when (@a < @b) { width: @b }
+
+//15-3类型检查
+// .mixin (@a; @b: 0) when (isnumber(@b)) { ... }
+// .mixin (@a; @b: black) when (iscolor(@b)) { ... }
+
+// Here are the basic type checking functions:
+// iscolor
+// isnumber
+// isstring
+// iskeyword
+// isurl
+// ispixel
+// ispercentage
+// isem
+// isunit
+
+//15-4 多条件
+.mixin (@a) when (@a > 0) { ...  }
+.mixin (@a) when (default()) { ... } // matches only if first mixin does not, i.e. when @a <= 0
+
+.mixin (@a) when (isnumber(@a)) and (@a > 0) { ... }
+
+.mixin (@b) when not (@b > 0) { ... }
+
+
+//16、CSS
+// & when (@my-option = true) {
+//   button {
+//     color: white;
+//   }
+//   a {
+//     color: blue;
+//   }
+// }
+
+
+//17、递归循环
+//17-1
+.loop(@counter) when (@counter > 0) {
+  .loop((@counter - 1));    // next iteration
+  width: (10px * @counter); // code for each iteration
+}
+
+div17 {
+  .loop(5); // launch the loop
+}
+
+//输出
+// div17 {
+//   width: 10px;
+//   width: 20px;
+//   width: 30px;
+//   width: 40px;
+//   width: 50px;
+// }
+
+//17-2
+.generate-columns(4);
+
+.generate-columns(@n, @i: 1) when (@i =< @n) {
+  .column-@{i} {
+    width: (@i * 100% / @n);
+  }
+  .generate-columns(@n, (@i + 1));
+}
+
+//输出
+// .column-1 {
+//   width: 25%;
+// }
+// .column-2 {
+//   width: 50%;
+// }
+// .column-3 {
+//   width: 75%;
+// }
+// .column-4 {
+//   width: 100%;
+// }
+
+//18、合并属性
+//为了避免意外的合并，merge 需要在每个需要合并的属性名后面添加一个 + 以作标示。
+.mixin18() {
+  box-shadow+: inset 0 0 10px #555;
+}
+.myclass18 {
+  .mixin18();
+  box-shadow+: 0 0 20px black;
+}
+
+//输出为
+// .myclass18 {
+//   box-shadow: inset 0 0 10px #555, 0 0 20px black;
+// }
+
+//19、父选择符
+//19-1
+// a {
+//   color: blue;
+//   &:hover {
+//     color: green;
+//   }
+// }
+//输出为
+// a {
+//   color: blue;
+// }
+
+// a:hover {
+//   color: green;
+// }
+
+//19-2
+.button {
+  &-ok {
+    background-image: url("ok.png");
+  }
+  &-cancel {
+    background-image: url("cancel.png");
+  }
+
+  &-custom {
+    background-image: url("custom.png");
+  }
+}
+
+//19-3  多个&
+.link {
+  & + & {
+    color: red;
+  }
+
+  & & {
+    color: green;
+  }
+
+  && {
+    color: blue;
+  }
+
+  &, &ish {
+    color: cyan;
+  }
+}
+//输出为
+// .link + .link {
+//   color: red;
+// }
+// .link .link {
+//   color: green;
+// }
+// .link.link {
+//   color: blue;
+// }
+// .link, .linkish {
+//   color: cyan;
+// }
+
+
+//19-4  
+//&指的是所有父节点，不仅仅只是最近的祖先
+.grand {
+  .parent {
+    & > & {
+      color: red;
+    }
+
+    & & {
+      color: green;
+    }
+
+    && {
+      color: blue;
+    }
+
+    &, &ish {
+      color: cyan;
+    }
+  }
+}
+
+//输出为
+// .grand .parent > .grand .parent {
+//   color: red;
+// }
+// .grand .parent .grand .parent {
+//   color: green;
+// }
+// .grand .parent.grand .parent {
+//   color: blue;
+// }
+// .grand .parent,
+// .grand .parentish {
+//   color: cyan;
+// }
+
+//19-5
+
+p, a, ul, li {
+border-top: 2px dotted #366;
+  & + & {
+      border-top: 0;
+  }
+}
+
+//输出为
+p,
+a,
+ul,
+li {
+  border-top: 2px dotted #366;
+}
+p + p,
+p + a,
+p + ul,
+p + li,
+a + p,
+a + a,
+a + ul,
+a + li,
+ul + p,
+ul + a,
+ul + ul,
+ul + li,
+li + p,
+li + a,
+li + ul,
+li + li {
+  border-top: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

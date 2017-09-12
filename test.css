@@ -1,0 +1,284 @@
+/*1*/
+#header {
+  color: #6c94be;
+}
+/*-------------------------*/
+
+/*2*/
+.bordered {
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+#menu a {
+  color: #111;
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+.post a {
+  color: red;
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+/*-------------------------*/
+
+/*3*/
+.clearfix {
+  display: block;
+  zoom: 1;
+}
+.clearfix:after {
+  content: " ";
+  display: block;
+  font-size: 0;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+/*-------------------------*/
+
+
+
+/*4*/
+.class {
+  width: 50%;
+  color: #f6430f;
+  background-color: #f8b38d;
+}
+/*-------------------------*/
+
+
+/*5*/
+#bundle .button {
+  display: block;
+  border: 1px solid black;
+  background-color: grey;
+}
+#bundle .button:hover {
+  background-color: white;
+}
+#header a {
+  color: orange;
+  display: block;
+  border: 1px solid black;
+  background-color: grey;
+}
+#header a:hover {
+  background-color: white;
+}
+/*-------------------------*/
+
+/*6*/
+#page #header {
+  color: white;
+}
+/*-------------------------*/
+
+
+/*7*/
+.banner {
+  font-weight: bold;
+  line-height: 40px;
+  margin: 0 auto;
+}
+
+body {
+  color: #444;
+  background: url("../img/white-sand.png");
+}
+/*-------------------------*/
+
+/*8*/
+nav ul {
+  background: blue;
+}
+.inline,
+nav ul {
+  color: red;
+}
+/*-------------------------*/
+
+
+/*9*/
+.a,
+#b {
+  color: red;
+}
+.mixin-class {
+  color: red;
+}
+.mixin-id {
+  color: red;
+}
+.my-mixin1 {
+  color: black;
+}
+.class {
+  color: black;
+  background: white;
+}
+button:hover {
+  border: 1px solid red;
+}
+#outer .inner {
+  color: red;
+}
+.c {
+  color: red;
+}
+.class {
+  color: black;
+}
+/*-------------------------*/
+
+/*10*/
+#header {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.some .selector div {
+  color-1: #008000;
+  color-2: #008000;
+  padding-2: 2;
+}
+/*-------------------------*/
+
+/*11*/
+.caller {
+  width: 100%;
+  height: 200px;
+}
+div112 {
+  padding: 33px;
+}
+/*-------------------------*/
+
+/*12*/
+.unimportant {
+  background: 1;
+  color: #900;
+}
+.important {
+  background: 2 !important;
+  color: #900 !important;
+}
+/*-------------------------*/
+
+
+/*13*/
+.big-block {
+  -webkit-box-shadow: 2px 5px 1px #000;
+  -moz-box-shadow: 2px 5px 1px #000;
+  box-shadow: 2px 5px 1px #000;
+}
+/*-------------------------*/
+
+/*14*/
+.class14 {
+  color: #a2a2a2;
+  display: block;
+}
+/*-------------------------*/
+
+
+/*15*/
+.class115 {
+  background-color: black;
+  color: #ddd;
+}
+.class215 {
+  background-color: white;
+  color: #555;
+}
+/*-------------------------*/
+
+
+/*17*/
+div17 {
+  width: 10px;
+  width: 20px;
+  width: 30px;
+  width: 40px;
+  width: 50px;
+}
+.column-1 {
+  width: 25%;
+}
+.column-2 {
+  width: 50%;
+}
+.column-3 {
+  width: 75%;
+}
+.column-4 {
+  width: 100%;
+}
+.myclass18 {
+  box-shadow: inset 0 0 10px #555, 0 0 20px black;
+}
+.button-ok {
+  background-image: url("ok.png");
+}
+.button-cancel {
+  background-image: url("cancel.png");
+}
+.button-custom {
+  background-image: url("custom.png");
+}
+.link + .link {
+  color: red;
+}
+.link .link {
+  color: green;
+}
+.link.link {
+  color: blue;
+}
+.link,
+.linkish {
+  color: cyan;
+}
+.grand .parent > .grand .parent {
+  color: red;
+}
+.grand .parent .grand .parent {
+  color: green;
+}
+.grand .parent.grand .parent {
+  color: blue;
+}
+.grand .parent,
+.grand .parentish {
+  color: cyan;
+}
+p,
+a,
+ul,
+li {
+  border-top: 2px dotted #366;
+}
+p + p,
+p + a,
+p + ul,
+p + li,
+a + p,
+a + a,
+a + ul,
+a + li,
+ul + p,
+ul + a,
+ul + ul,
+ul + li,
+li + p,
+li + a,
+li + ul,
+li + li {
+  border-top: 0;
+}
+p,
+a,
+ul,
+li {
+  border-top: 2px dotted #366;
+}
+/*-------------------------*/
